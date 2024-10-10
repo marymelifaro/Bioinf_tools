@@ -11,6 +11,7 @@ DICT_COMPL = {'A': 'T', 'a': 't', 'T': 'A', 't': 'a', 'U': 'A',
 START_CODON = 'AUG'
 DNA_NUCLEOTIDES = set('ATCG')
 RNA_NUCLEOTIDES = set('AUCG')
+FORBIDDEN_NUCLEOTIDES = set('TU')
 
 
 def transcribe(seq: str) -> str:
@@ -49,11 +50,15 @@ def check_seq(seq: Any):
     seq = seq.upper()
     unique_nucleotides = set(seq)
     if len(unique_nucleotides) > 4:
-        raise ValueError("sequence must have 4 unique symbols")
+        raise ValueError("sequence must have not more than 4 unique symbols")
 
     if unique_nucleotides.issubset(DNA_NUCLEOTIDES) == unique_nucleotides.issubset(RNA_NUCLEOTIDES):
         raise ValueError(f"sequence must consist of DNA nucleotides or RNA nucleotides. "
                          f"Now unique nucleotides are {unique_nucleotides}")
+
+    if FORBIDDEN_NUCLEOTIDES.issubset(unique_nucleotides):
+        raise ValueError("sequence must consist of DNA nucleotides or RNA nucleotides. "
+                         "Now the sequence contains both 'T' and 'U'. ")
 
 
 DNA_RNA_FUNCTIONS = {

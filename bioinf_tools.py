@@ -1,5 +1,6 @@
+from numbers import Real
 from src.dna_rna_tools import DNA_RNA_FUNCTIONS, check_seq
-from src.filter_fastq_tools import filter_gc, filter_quality, filter_length, number
+from src.filter_fastq_tools import filter_gc, filter_quality, filter_length
 
 
 def run_dna_rna_tools(*args) -> str | list[str]:
@@ -24,9 +25,9 @@ def run_dna_rna_tools(*args) -> str | list[str]:
 
 
 def filter_fastq(seqs: dict[str, tuple[[str, str]]],
-                 gc_bounds: tuple[number, number] | number = (0, 100),
-                 length_bounds: tuple[int, int] | int = (0, 2 ** 32),
-                 quality_threshold: number = 0) -> dict[str, tuple[[str, str]]]:
+                 gc_bounds: tuple[Real, Real] | list[Real, Real] | Real = (0, 100),
+                 length_bounds: tuple[int, int] | list[int, int] | int = (0, 2 ** 32),
+                 quality_threshold: Real = 0) -> dict[str, tuple[[str, str]]]:
     """
     Filters FASTQ sequences based on GC content, length, and quality.
 
@@ -42,17 +43,21 @@ def filter_fastq(seqs: dict[str, tuple[[str, str]]],
     :return: New dictionary with FASTQ sequences that meet all the filtering criteria
             (quality threshold, length bounds, GC bounds).
     """
+    if isinstance(gc_bounds, list):
+        gc_bounds = tuple(gc_bounds)
     if not isinstance(gc_bounds, tuple):
         gc_bounds = (0, gc_bounds)
+
+    if isinstance(length_bounds, list):
+        length_bounds = tuple(length_bounds)
     if not isinstance(length_bounds, tuple):
         length_bounds = (0, length_bounds)
 
     filtered_seqs = {}
-    for name in seqs:
-        seq = seqs[name][0]
+    for name, (seq, quality) in seqs.items():
         check_seq(seq)
-        quality = seqs[name][1]
-        if filter_length(seq, length_bounds) or filter_gc(seq, gc_bounds) or filter_quality(quality, quality_threshold):
+        if not (filter_length(seq, length_bounds) and filter_gc(seq, gc_bounds)
+                and filter_quality(quality, quality_threshold)):
             continue
         filtered_seqs[name] = seqs[name]
     return filtered_seqs
