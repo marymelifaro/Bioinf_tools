@@ -13,9 +13,9 @@ run_dna_rna_tools(*args)
 ```
 ```
 filter_fastq((seqs: dict[str, tuple[[str, str]]],
-                 gc_bounds: tuple[number, number] | number = (0, 100),
+                 gc_bounds: tuple[Real, Real] | Real = (0, 100),
                  length_bounds: tuple[int, int] | int = (0, 2 ** 32),
-                 quality_threshold: number = 0) -> dict[str, tuple[[str, str]]]:)
+                 quality_threshold: Real = 0) -> dict[str, tuple[[str, str]]]:)
 ```
 ## Features
 ### filter_fastq
@@ -41,11 +41,11 @@ run_dna_rna_tools('AtAcGGC','ccAUcTc' 'transcribe') -> ['AuAcGGC', 'ccATctc']
 run_dna_rna_tools('AUcgCGCCauaAccGccuUaa','find_stop') -> 'AUcgCGCCauaA'
 ```
 ```python
-filter_fastq({'@SRX079804': ('TGAAGCGTCGATAGAAGTTAGCAAACCCGCGGAACTTCCGTACATCAGACACATTCCGGGGGGTGGGCCAATCCATGATGCCTTTG', 
-                             'FF@FFBEEEEFFEFFD@EDEFFB=DFEEFFFE8FFE8EEDBFDFEEBE+E<C<C@FFFFF;;338<??D:@=DD:8DDDD@EE?EB'), 
-              '@SRX079809': ('GAACCTTCTTTAATTTATCTAGAGCCCAAATTTTAGTCAATCTATCAACTAAAATACCTACTGCTACTACAAGTATT', 
-                             'DACD@BEECEDE.BEDDDDD,>:@>EEBEEHEFEHHFFHH?FGBGFBBD77B;;C?FFFFGGFED.BBABBG@DBBE')},(20,50),(10,80), 30)) -> 
-{'@SRX079809': ('GAACCTTCTTTAATTTATCTAGAGCCCAAATTTTAGTCAATCTATCAACTAAAATACCTACTGCTACTACAAGTATT', 'DACD@BEECEDE.BEDDDDD,>:@>EEBEEHEFEHHFFHH?FGBGFBBD77B;;C?FFFFGGFED.BBABBG@DBBE')}
+filter_fastq({'@SRX079804': ('TGAAGCGTCGATAGAAGTTAGCAAACCC', 
+                             'FF@FFBEEEEFFEFFD@EDEFFB=DFEE'), 
+              '@SRX079809': ('GAACCTTCTTTAATTTATCTAGAGCCCAAAT', 
+                             'DACD@BEECEDE.BEDDDDD,>:@>EEBEEH')},(20,50),(10,28), 30)) -> 
+{{'@SRX079804': ('TGAAGCGTCGATAGAAGTTAGCAAACCC', 'FF@FFBEEEEFFEFFD@EDEFFB=DFEE')}}
 ```
 
 ## Project structure
