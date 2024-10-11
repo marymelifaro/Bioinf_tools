@@ -22,3 +22,24 @@ def convert_multiline_fasta_to_oneline(input_fasta: str | Path, output_fasta: st
                 else:
                     is_first_line = False
                 out_file.write(line)
+
+
+def parse_blast_output(input_file: str | Path, output_file: str | Path):
+    result = []
+    with open(input_file, 'r') as in_file:
+        cnt = -2 ** 32
+        for line in in_file:
+            if line.startswith('Query #'):
+                cnt = 0
+            cnt += 1
+            if cnt == 5:
+                descr_length = line.find('Name')
+            if cnt == 6:
+                result.append(line[:descr_length].strip())
+    result = sorted(result)
+
+    Path(output_file).parent.mkdir(exist_ok=True)
+    with open(output_file, 'w') as file:
+        for item in result:
+            file.write(item)
+            file.write('\n')
