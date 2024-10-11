@@ -1,9 +1,10 @@
+import os
 from numbers import Real
 from pathlib import Path
-import os
 
+from config import FASTQ_SAMPLE_ROWS
 from src.dna_rna_tools import DNA_RNA_FUNCTIONS, check_seq
-from src.filter_fastq_tools import filter_gc, filter_quality, filter_length
+from src.filter_fastq_tools import filter_gc, filter_length, filter_quality
 
 
 def run_dna_rna_tools(*args) -> str | list[str]:
@@ -67,7 +68,7 @@ def filter_fastq(input_fastq: str | Path,
     with open(input_fastq, 'r') as in_file, open(output_fastq, 'w') as out_file:
         while True:
             data = []
-            for _ in range(4):
+            for _ in range(FASTQ_SAMPLE_ROWS):
                 try:
                     line = in_file.readline().strip()
                     if not line:

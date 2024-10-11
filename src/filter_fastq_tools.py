@@ -1,5 +1,6 @@
 from numbers import Real
-PHRED33_SHIFT = 33
+
+from config import PHRED33_SHIFT
 
 
 def is_bounded(x, bounds):
