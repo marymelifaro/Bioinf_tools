@@ -4,6 +4,15 @@ from config import OUTPUT_FASTA_MULTILINE
 
 
 def convert_multiline_fasta_to_oneline(input_fasta: str | Path, output_fasta: str | Path | None = None):
+    """
+    Converts multiline FASTA sequence to 1 line.
+
+    :param input_fasta: string with the path to file with FASTA sequences.
+    :param output_fasta: string with the path to file with FASTA sequences, written in 1 line.
+                        If output_fasta path is None, function use input_fasta path as template for output_fasta.
+    """
+
+
     input_fasta = Path(input_fasta)
     if output_fasta is None:
         output_fasta = input_fasta.parent / (input_fasta.stem + OUTPUT_FASTA_MULTILINE + input_fasta.suffix)
@@ -25,6 +34,15 @@ def convert_multiline_fasta_to_oneline(input_fasta: str | Path, output_fasta: st
 
 
 def parse_blast_output(input_file: str | Path, output_file: str | Path):
+    """
+    Reads a BLAST results text file, extracts the description of the best match (first hit) for each query sequence
+    and writes the extracted protein names into the output file. Protein names are sorted alphabetically and are
+    written in one column.
+
+    :param input_file: string with the path to file with blast results.
+    :param output_file: string with the path to output_file.
+                        If output_file path is None, function use input_file path as template for output_file.
+    """
     result = []
     with open(input_file, 'r') as in_file:
         cnt = -2 ** 32
