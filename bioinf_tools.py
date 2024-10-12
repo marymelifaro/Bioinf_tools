@@ -37,17 +37,15 @@ def filter_fastq(input_fastq: str | Path,
     """
     Filters FASTQ sequences based on GC content, length, and quality.
 
-    :param seqs: Dictionary with FASTQ sequences. The key is a string representing the name of the sequence.
-                 The value is a tuple consisting of the sequence itself (as a string) and
-                 its quality scores (as a string).
+    :param input_fastq: string with the path to file with FASTQ sequences
+    :param output_fastq: string with the path to file with filtered FASTQ sequences
     :param gc_bounds: Range of values for GC content percentage in the sequence. A tuple with two numbers defines
                       the range, while a single number represents the upper limit. Default is (0, 100).
     :param length_bounds: Range for the length of the sequence. A tuple with two numbers represents a range.
                           Default value is (0, 2^32).
     :param quality_threshold: Threshold value for the average quality of the sequence. Reads with an average quality
                               below this threshold will be filtered out. Default value is 0.
-    :return: New dictionary with FASTQ sequences that meet all the filtering criteria
-            (quality threshold, length bounds, GC bounds).
+    :param rewrite: If set to True, the output file will be overwritten if it already exists. Default is False.
     """
 
     if isinstance(gc_bounds, list):

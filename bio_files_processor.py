@@ -12,7 +12,6 @@ def convert_multiline_fasta_to_oneline(input_fasta: str | Path, output_fasta: st
                         If output_fasta path is None, function use input_fasta path as template for output_fasta.
     """
 
-
     input_fasta = Path(input_fasta)
     if output_fasta is None:
         output_fasta = input_fasta.parent / (input_fasta.stem + OUTPUT_FASTA_MULTILINE + input_fasta.suffix)
