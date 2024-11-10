@@ -1,16 +1,7 @@
 from typing import Any
 
-STOP_CODONS = ['UAA', 'UAG', 'UGA']
-
-DICT_TRANS = {'A': 'A', 'a': 'a', 'T': 'U', 't': 'u', 'U': 'T',
-              'u': 't', 'G': 'G', 'g': 'g', 'C': 'C', 'c': 'c'}
-
-DICT_COMPL = {'A': 'T', 'a': 't', 'T': 'A', 't': 'a', 'U': 'A',
-              'u': 'a', 'G': 'C', 'g': 'c', 'C': 'G', 'c': 'g'}
-
-START_CODON = 'AUG'
-DNA_NUCLEOTIDES = set('ATCG')
-RNA_NUCLEOTIDES = set('AUCG')
+from config import (DICT_COMPL, DICT_TRANS, DNA_NUCLEOTIDES, FORBIDDEN_NUCLEOTIDES, RNA_NUCLEOTIDES, START_CODON,
+                    STOP_CODONS)
 
 
 def transcribe(seq: str) -> str:
@@ -49,9 +40,14 @@ def check_seq(seq: Any):
     seq = seq.upper()
     unique_nucleotides = set(seq)
     if len(unique_nucleotides) > 4:
-        raise ValueError("sequence must have 4 unique symbols")
+        raise ValueError("sequence must have not more than 4 unique symbols. "
+                         f"Now unique symbols are: {unique_nucleotides}")
 
-    if unique_nucleotides.issubset(DNA_NUCLEOTIDES) == unique_nucleotides.issubset(RNA_NUCLEOTIDES):
+    if FORBIDDEN_NUCLEOTIDES.issubset(unique_nucleotides):
+        raise ValueError("sequence must consist of DNA nucleotides or RNA nucleotides. "
+                         "Now the sequence contains both 'T' and 'U'. ")
+
+    if not unique_nucleotides.issubset(DNA_NUCLEOTIDES) and not unique_nucleotides.issubset(RNA_NUCLEOTIDES):
         raise ValueError(f"sequence must consist of DNA nucleotides or RNA nucleotides. "
                          f"Now unique nucleotides are {unique_nucleotides}")
 
